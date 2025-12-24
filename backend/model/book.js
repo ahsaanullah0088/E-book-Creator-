@@ -1,4 +1,4 @@
-const mongooe = require("mongoose");
+const mongoose = require("mongoose");
 const chapterSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -16,7 +16,7 @@ const chapterSchema = new mongoose.Schema({
 
 const bookSchema = new mongoose.Schema(
   {
-    useId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,

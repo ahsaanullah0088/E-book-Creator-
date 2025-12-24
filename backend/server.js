@@ -1,31 +1,44 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
 const cors = require('cors');
 const path = require('path');
- const connectDB = require('./config/db');
+const connectDB = require('./config/db');
 
- app.use(cors(
-    {
-        origin: '*',
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        allowedHeaders: ['Content-Type', 'Authorization']
-    }
- ));
-// connect to database
-connectDB();
-// middleware to parse json requests
+const authRoutes = require('./routes/authRoute');
+
+const app = express();
+
+// CORS
+app.use(
+  cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
+
+// Body parsers
 app.use(express.json());
-// routes
+app.use(express.urlencoded({ extended: true }));
 
-// statis foler for uploads 
+// Static uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// server start point
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server is running on port ${process.env.PORT || 3000}`);
+
+// Connect DB
+connectDB();
+
+// Routes
+app.use('/api/auth', authRoutes);
+
+// Health check
+app.get('/', (req, res) => {
+  res.json({ message: 'API running successfully' });
 });
 
-
+// Server start
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
 
 module.exports = app;
-
