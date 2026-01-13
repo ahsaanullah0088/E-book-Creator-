@@ -57,7 +57,7 @@ exports.loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    res.json({
+    res.json({ 
       _id: user._id,
       name: user.name,
       email: user.email,
@@ -71,7 +71,21 @@ exports.loginUser = async (req, res) => {
 
 // @route GET /api/auth/profile
 exports.getProfile = async (req, res) => {
-  res.json(req.user);
+  try{
+    const user = await User.findById(req.user._id).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      isPro : user.isPro,  
+    });
+  } catch (error) {
+    console.error('GET PROFILE ERROR:', error);
+    res.status(500).json({ message: error.message }); 
+  }
 };
 
 // @route PUT /api/auth/profile
