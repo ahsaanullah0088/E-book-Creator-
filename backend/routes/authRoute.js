@@ -14,5 +14,10 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/profile', protect, getProfile);
 router.put('/profile', protect, updateUserProfile);
+router.get("/test", (req, res) => {
+  res.send("Auth route is working");
+} );
+
+
 
 module.exports = router;
