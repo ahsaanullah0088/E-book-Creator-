@@ -34,6 +34,7 @@ const bookSchema = new mongoose.Schema(
       default: "",
     },
     chapters: [chapterSchema],
+    coverImage: { type: String },
     status: {
       type: String,
       enum: ["draft", "published"],
